@@ -53,11 +53,17 @@ UI.prototype.deleteBook = function(target) {
 
 // Favorite Row
 UI.prototype.favoriteRow = function(target) {
-  if (target.parentElement.className === 'favorite') {
-    target.parentElement.className = 'favorite favoriteBook';
-  } else if (target.parentElement.className === 'favorite favoriteBook') {
-    target.parentElement.className = 'favorite';
+  const table = target.parentElement.parentElement.parentElement.parentElement;
+  const tr = target.parentElement.parentElement.parentElement;
+  let linkClass = target.parentElement.className;
+  if (linkClass === 'favorite') {
+    linkClass = 'favorite favoriteBook';
+    table.insertBefore(tr, table.firstChild);
+  } else if (linkClass === 'favorite favoriteBook') {
+    linkClass = 'favorite';
+    table.appendChild(tr, table.lastChild);
   }
+  target.parentElement.className = linkClass;
 }
 
 // Clear Fields
