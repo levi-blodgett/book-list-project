@@ -1,3 +1,7 @@
+html {
+  background: rgb(255, 255, 255);
+}
+
 .success, .error {
   color: white;
   padding: 5px;
@@ -10,4 +14,54 @@
 
 .error {
   background: red;
+}
+
+h1 {
+  margin-top: 7rem !important;
+  margin-bottom: 7rem !important;
+  text-align: center;
+}
+
+span {
+  margin: 0;
+  font-size: 75px;
+  -webkit-text-stroke: 1px rgb(255, 255, 255);
+   text-shadow:
+       1px 1px 0 rgb(255, 255, 255),
+     -1px -1px 0 rgb(255, 255, 255),  
+      1px -1px 0 rgb(255, 255, 255),
+      -1px 1px 0 rgb(255, 255, 255),
+       1px 1px 0 rgb(255, 255, 255);
+}
+
+.red {
+  color: red;
+}
+
+.green {
+  color: green;
+}
+
+.blue {
+  color: blue;
+}
+
+.yellow {
+  color: yellow;
+}
+
+.star {
+  width: 18px;
+  padding: 10px;
+  border-bottom: 0px;
+}
+
+img, .favorite {
+  height: 18px;
+  width: 18px;
+  display: inline-block; 
+}
+
+.delete {
+  text-decoration: none;
 }

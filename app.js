@@ -18,6 +18,7 @@ UI.prototype.addBookToList = function(book) {
     <td>${book.title}</td>
     <td>${book.author}</td>
     <td>${book.isbn}</td>
+    <td class="star"><a href="#" class="favorite"><img src="images/star.png"><a></td>
     <td><a href="#" class="delete">X<a></td>
     `;
 
