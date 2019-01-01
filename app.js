@@ -52,7 +52,7 @@ UI.prototype.deleteBook = function(target) {
 }
 
 // Favorite Row
-UI.prototype.favoriteUnfavoriteRow = function(target) {
+UI.prototype.favoriteBook = function(target) {
   // Initialize variables for parent elements
   const table = target.parentElement.parentElement.parentElement.parentElement;
   const tr = target.parentElement.parentElement.parentElement;
@@ -73,6 +73,7 @@ UI.prototype.favoriteUnfavoriteRow = function(target) {
     // Insert the row at the bottom of the rows
     table.appendChild(tr, table.lastChild);
   }
+  // Set the actual class to the variable we changed
   target.parentElement.className = linkClass;
 }
 
@@ -126,7 +127,7 @@ document.getElementById('book-list').addEventListener('click', function(e) {
     // Show message
     ui.showAlert('Book Removed!', 'success');
   } else if (e.target.parentElement.parentElement.className === 'star') {
-    ui.favoriteUnfavoriteRow(e.target);
+    ui.favoriteBook(e.target);
 
     // Determine whether it is favoriting or unfavoriting
     if (e.target.parentElement.className === 'favoriteButton favorited'){
