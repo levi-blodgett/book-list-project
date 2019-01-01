@@ -53,15 +53,25 @@ span {
 .star {
   width: 18px;
   padding: 10px;
+  height: 18px;
   border-bottom: 0px;
 }
 
 img, .favorite {
-  height: 18px;
-  width: 18px;
+  height: 20px;
+  width: 20px;
   display: inline-block; 
+  border-radius: 50%;
+}
+
+.favorite {
+  height: 21px !important;
 }
 
 .delete {
   text-decoration: none;
+}
+
+.favoriteBook {
+  background: forestgreen;
 }

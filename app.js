@@ -18,7 +18,7 @@ UI.prototype.addBookToList = function(book) {
     <td>${book.title}</td>
     <td>${book.author}</td>
     <td>${book.isbn}</td>
-    <td class="star"><a href="#" class="favorite"><img src="images/star.png"><a></td>
+    <td class="star"><a href="#" class="favorite"><img src="images/star.png"></a></td>
     <td><a href="#" class="delete">X<a></td>
     `;
 
@@ -48,8 +48,15 @@ UI.prototype.showAlert = function(message, className) {
 
 // Delete Book
 UI.prototype.deleteBook = function(target) {
-  if (target.className === 'delete') {
-    target.parentElement.parentElement.remove();
+  target.parentElement.parentElement.remove();
+}
+
+// Favorite Row
+UI.prototype.favoriteRow = function(target) {
+  if (target.parentElement.className === 'favorite') {
+    target.parentElement.className = 'favorite favoriteBook';
+  } else if (target.parentElement.className === 'favorite favoriteBook') {
+    target.parentElement.className = 'favorite';
   }
 }
 
@@ -91,15 +98,29 @@ document.getElementById('book-form').addEventListener('submit', function(e){
   e.preventDefault();
 })
 
-// Add event listener for delete
+// Add event listeners for delete and favorite book
 document.getElementById('book-list').addEventListener('click', function(e) {
   // Instantiate UI
   const ui = new UI();
 
-  ui.deleteBook(e.target);
+  // Determine whether it is deleting or favoriting
+  if (e.target.className === 'delete') {
+    ui.deleteBook(e.target);
 
-  // Show message
-  ui.showAlert('Book Removed!', 'success');
+    // Show message
+    ui.showAlert('Book Removed!', 'success');
+  } else if (e.target.parentElement.parentElement.className === 'star') {
+    ui.favoriteRow(e.target);
+
+    // Determine whether it is favoriting or unfavoriting
+    if (e.target.parentElement.className === 'favorite favoriteBook'){
+      // Show message
+      ui.showAlert('Book Favorited!', 'success');
+    } else {
+      // Show message
+      ui.showAlert('Book Unfavorited!', 'success');
+    }
+  }
 
   e.preventDefault();
 })
