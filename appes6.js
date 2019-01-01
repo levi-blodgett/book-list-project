@@ -30,24 +30,34 @@ class UI {
     list.appendChild(row);
   }
 
-  showAlert(message, className) {
+  createAlert(message, className) {
+    if (document.querySelector('.alert')) {
+      console.log(1);
+      document.querySelector('.alert').remove();
+    }
     // Create div
     const div = document.createElement('div');
     // Add classes
     div.className = `alert ${className}`;
+    // Add ID
+    div.id = 'alert';
     // Add text
     div.appendChild(document.createTextNode(message));
+    // Add delete button
+    div.innerHTML = `
+    ${message}
+    <a href="#" title="Hide Error" class="deleteError">X<a>
+    `
     // Get parent
     const container = document.querySelector('.container');
     // Get form
     const form = document.querySelector('#book-form');
+    // Add event listener for deleting error
+    div.querySelector('.deleteError').addEventListener('click', function(e) {
+      div.remove();
+    })
     // Insert alert
-    container.insertBefore(div, form);
-
-    // Timeout after 3 seconds
-    setTimeout(function() {
-      document.querySelector('.alert').remove();
-    }, 3000);
+    container.append(div);
   }
 
   deleteBook(target) {
@@ -102,13 +112,13 @@ document.getElementById('book-form').addEventListener('submit', function(e){
   // Validate
   if (title === '' || author === '' || isbn === '') {
     // Error alert
-    ui.showAlert('Please fill in all fields', 'error');
+    ui.createAlert('Please fill in all fields', 'error');
   } else {
     // Add book to list
     ui.addBookToList(book);
 
     // Show success
-    ui.showAlert('Book Added!', 'success');
+    ui.createAlert('Book Added!', 'success');
 
     // Clear fields
     ui.clearFields();
@@ -127,17 +137,17 @@ document.getElementById('book-list').addEventListener('click', function(e) {
     ui.deleteBook(e.target);
 
     // Show message
-    ui.showAlert('Book Removed!', 'success');
+    ui.createAlert('Book Removed!', 'success');
   } else if (e.target.parentElement.parentElement.className === 'star') {
     ui.favoriteBook(e.target);
 
     // Determine whether it is favoriting or unfavoriting
     if (e.target.parentElement.className === 'favoriteButton favorited'){
       // Show message
-      ui.showAlert('Book Favorited!', 'success');
+      ui.createAlert('Book Favorited!', 'success');
     } else {
       // Show message
-      ui.showAlert('Book Unfavorited!', 'success');
+      ui.createAlert('Book Unfavorited!', 'success');
     }
   }
 

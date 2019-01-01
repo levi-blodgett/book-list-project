@@ -2,6 +2,13 @@ html {
   background: rgb(255, 255, 255);
 }
 
+.alert {
+  position: fixed;
+  bottom: 10px;
+  right: 27px;
+  border-radius: 8px;
+}
+
 .success, .error {
   color: white;
   padding: 5px;
@@ -10,10 +17,12 @@ html {
 
 .success {
   background: green;
+  border: 2px lightgreen solid;
 }
 
 .error {
   background: red;
+  border: 2px pink solid;
 }
 
 h1 {
@@ -68,7 +77,7 @@ img, .favoriteButton {
   height: 21px !important;
 }
 
-.delete {
+.delete, .deleteError {
   text-decoration: none;
 }
 
