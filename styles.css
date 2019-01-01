@@ -57,14 +57,14 @@ span {
   border-bottom: 0px;
 }
 
-img, .favorite {
+img, .favoriteButton {
   height: 20px;
   width: 20px;
   display: inline-block; 
   border-radius: 50%;
 }
 
-.favorite {
+.favoriteButton {
   height: 21px !important;
 }
 
@@ -72,6 +72,6 @@ img, .favorite {
   text-decoration: none;
 }
 
-.favoriteBook {
+.favorited {
   background: forestgreen;
 }

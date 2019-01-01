@@ -18,8 +18,8 @@ UI.prototype.addBookToList = function(book) {
     <td>${book.title}</td>
     <td>${book.author}</td>
     <td>${book.isbn}</td>
-    <td class="star"><a href="#" class="favorite"><img src="images/star.png"></a></td>
-    <td><a href="#" class="delete">X<a></td>
+    <td class="star"><a href="#" title="Favorite" class="favoriteButton"><img src="images/star.png"></a></td>
+    <td><a href="#" title="Remove" class="delete">X<a></td>
     `;
 
     list.appendChild(row);
@@ -52,15 +52,25 @@ UI.prototype.deleteBook = function(target) {
 }
 
 // Favorite Row
-UI.prototype.favoriteRow = function(target) {
+UI.prototype.favoriteUnfavoriteRow = function(target) {
+  // Initialize variables for parent elements
   const table = target.parentElement.parentElement.parentElement.parentElement;
   const tr = target.parentElement.parentElement.parentElement;
   let linkClass = target.parentElement.className;
-  if (linkClass === 'favorite') {
-    linkClass = 'favorite favoriteBook';
+  // Determine if they are favorited or not
+  if (linkClass === 'favoriteButton') {
+    // Set class to favorited
+    linkClass = 'favoriteButton favorited';
+    // Change tooltip
+    target.parentElement.title = 'Unfavorite';
+    // Insert the row at the top of the rows
     table.insertBefore(tr, table.firstChild);
-  } else if (linkClass === 'favorite favoriteBook') {
-    linkClass = 'favorite';
+  } else if (linkClass === 'favoriteButton favorited') {
+    // Set class to regular class it starts as
+    linkClass = 'favoriteButton';
+    // Change tooltip
+    target.parentElement.title = 'Favorite';
+    // Insert the row at the bottom of the rows
     table.appendChild(tr, table.lastChild);
   }
   target.parentElement.className = linkClass;
@@ -116,10 +126,10 @@ document.getElementById('book-list').addEventListener('click', function(e) {
     // Show message
     ui.showAlert('Book Removed!', 'success');
   } else if (e.target.parentElement.parentElement.className === 'star') {
-    ui.favoriteRow(e.target);
+    ui.favoriteUnfavoriteRow(e.target);
 
     // Determine whether it is favoriting or unfavoriting
-    if (e.target.parentElement.className === 'favorite favoriteBook'){
+    if (e.target.parentElement.className === 'favoriteButton favorited'){
       // Show message
       ui.showAlert('Book Favorited!', 'success');
     } else {
