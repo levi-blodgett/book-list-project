@@ -5,10 +5,11 @@
 // but it looks a lot better, syntactical sugar
 
 class Book {
-  constructor(title, author, isbn) {
+  constructor(title, author, isbn, className) {
     this.title = title;
     this.author = author;
     this.isbn = isbn;
+    this.className = className;
   }
 }
 
@@ -23,7 +24,7 @@ class UI {
       <td>${book.title}</td>
       <td>${book.author}</td>
       <td>${book.isbn}</td>
-      <td class="star"><a href="#" title="Favorite" class="favoriteButton"><img src="images/star.png"></a></td>
+      <td class="star"><a href="#" title="Favorite" class="${book.className}"><img src="images/star.png"></a></td>
       <td><a href="#" title="Remove" class="delete">X<a></td>
       `;
   
@@ -32,7 +33,7 @@ class UI {
 
   createAlert(message, className) {
     if (document.querySelector('.alert')) {
-      console.log(1);
+      // Delete old alert if exists
       document.querySelector('.alert').remove();
     }
     // Create div
@@ -75,45 +76,118 @@ class UI {
     const table = target.parentElement.parentElement.parentElement.parentElement;
     const tr = target.parentElement.parentElement.parentElement;
     let linkClass = target.parentElement.className;
+    let title = target.parentElement.parentElement.previousElementSibling.previousElementSibling.previousElementSibling.textContent;
+    let author = target.parentElement.parentElement.previousElementSibling.previousElementSibling.textContent;
+    let ISBN = target.parentElement.parentElement.previousElementSibling.textContent;
     // Determine if they are favorited or not
     if (linkClass === 'favoriteButton') {
       // Set class to favorited
       linkClass = 'favoriteButton favorited';
       // Change tooltip
       target.parentElement.title = 'Unfavorite';
-      // Insert the row at the top of the rows
-      table.prepend(tr);
+      // Set the actual class to the variable we changed
+      target.parentElement.className = linkClass;
+      // Instantiate book
+      const book = new Book(title, author, ISBN, linkClass);
+      // Store in local storage and prepend
+      Store.favoriteBookLS(true, tr, table, book, ISBN);
     } else if (linkClass === 'favoriteButton favorited') {
       // Set class to regular class it starts as
       linkClass = 'favoriteButton';
       // Change tooltip
       target.parentElement.title = 'Favorite';
-      // Insert the row at the bottom of the rows
-      table.append(tr);
+      // Set the actual class to the variable we changed
+      target.parentElement.className = linkClass;
+      // Instantiate book
+      const book = new Book(title, author, ISBN, linkClass);
+      // Store in local storage and prepend
+      Store.favoriteBookLS(false, tr, table, book, ISBN);
     }
-    // Set the actual class to the variable we changed
-    target.parentElement.className = linkClass;
   }
 }
 
 // Local Storage Class
 class Store {
   static getBooks() {
-    
+    // Initialize books
+    let books;
+    // If the LS storage books key is empty, make books an empty array
+    // If not, then get the books from LS and return them
+    if (localStorage.getItem('books') === null) {
+      books = [];
+    } else {
+      // Needs to be a JS object, so we need to user the JSON.parse()
+      books = JSON.parse(localStorage.getItem('books'));
+    }
+
+    return books;
   }
 
   static displayBooks() {
-    
+    // Instantiate books
+    const books = Store.getBooks();
+
+    // Loop through books to add the books in LS to the UI
+    books.forEach(function(book) {
+      const ui = new UI;
+
+      // Add book to UI
+      ui.addBookToList(book);
+    })
   }
 
-  static addBook() {
+  static addBook(book) {
+    // Instantiate books
+    const books = Store.getBooks();
 
+    // Add book to bottom of LS
+    books.push(book);
+
+    // Instantiate LS
+    localStorage.setItem('books', JSON.stringify(books));
   }
 
-  static removeBook() {
+  static removeBook(isbn) {
+    // Instantiate books
+    const books = Store.getBooks();
+    // Remove the book from LS by finding it through a loop
+    books.forEach(function(book, index) {
+      if (book.isbn === isbn) {
+        books.splice(index, 1);
+      }
+    });
 
+    // Instantiate LS
+    localStorage.setItem('books', JSON.stringify(books));
+  }
+
+  static favoriteBookLS(isFavoriting, tableRow, tableVar, book, isbn) {
+    // Instantiate books
+    const books = Store.getBooks();
+    // Remove the book from LS by finding it through a loop
+    books.forEach(function(book, index) {
+      if (book.isbn === isbn) {
+        books.splice(index, 1);
+      }
+    });
+    if (isFavoriting) {
+      // Add book to top of table
+      tableVar.prepend(tableRow);
+      // Add book to top of LS
+      books.unshift(book);
+    } else {
+      // Add book to bottom of table
+      tableVar.append(tableRow);
+      // Add book to bottom of LS
+      books.push(book);
+    }
+    // Set book change in LS
+    localStorage.setItem('books', JSON.stringify(books));
   }
 }
+
+// DOM Load Event
+document.addEventListener('DOMContentLoaded', Store.displayBooks);
 
 // Event Listener for add book
 document.getElementById('book-form').addEventListener('submit', function(e){
@@ -123,7 +197,7 @@ document.getElementById('book-form').addEventListener('submit', function(e){
         isbn = document.getElementById('isbn').value;
   
   // Instantiate book
-  const book = new Book(title, author, isbn);
+  const book = new Book(title, author, isbn, 'favoriteButton');
 
   // Instantiate UI
   const ui = new UI();
@@ -135,6 +209,9 @@ document.getElementById('book-form').addEventListener('submit', function(e){
   } else {
     // Add book to list
     ui.addBookToList(book);
+
+    // Add to LS
+    Store.addBook(book);
 
     // Show success
     ui.createAlert('Book Added!', 'success');
@@ -155,6 +232,9 @@ document.getElementById('book-list').addEventListener('click', function(e) {
   if (e.target.className === 'delete') {
     ui.deleteBook(e.target);
 
+    // Remove from LS
+    Store.removeBook(e.target.parentElement.previousElementSibling.previousElementSibling.textContent);
+
     // Show message
     ui.createAlert('Book Removed!', 'success');
   } else if (e.target.parentElement.parentElement.className === 'star') {
@@ -169,6 +249,5 @@ document.getElementById('book-list').addEventListener('click', function(e) {
       ui.createAlert('Book Unfavorited!', 'success');
     }
   }
-
   e.preventDefault();
 })
