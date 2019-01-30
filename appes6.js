@@ -4,6 +4,10 @@
 // Under the hood it is happening the same way, 
 // but it looks a lot better, syntactical sugar
 
+let allowableISBN = /\d{10,13}/;
+let allowableAuthor = /^(([A-Za-z]{1,}\s?[A-Za-z]{0,}){1,})$/;
+let allowableTitle = /^(([A-Za-z]{1,}\s?[A-Za-z]{0,}){1,})$/;
+
 class Book {
   constructor(title, author, isbn, className) {
     this.title = title;
@@ -206,6 +210,15 @@ document.getElementById('book-form').addEventListener('submit', function(e){
   if (title === '' || author === '' || isbn === '') {
     // Error alert
     ui.createAlert('Please fill in all fields', 'error');
+  } else if (allowableTitle.test(book.title) === false){
+    // Error alert
+    ui.createAlert('Please fill in title field with only letters and single spaces', 'error');
+  } else if (allowableAuthor.test(book.author) === false){
+    // Error alert
+    ui.createAlert('Please fill in author field with only letters and single spaces', 'error');
+  } else if (allowableISBN.test(book.isbn) === false){
+    // Error alert
+    ui.createAlert('Please fill in ISBN field with enough digits', 'error');
   } else {
     // Add book to list
     ui.addBookToList(book);
