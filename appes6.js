@@ -4,7 +4,7 @@
 // Under the hood it is happening the same way, 
 // but it looks a lot better, syntactical sugar
 
-let allowableISBN = /^\d{10,13$}/; // Only digits in ISBN, 10-13 are the allowable range
+let allowableISBN = /^\d{10,13}$/; // Only digits in ISBN, 10-13 are the allowable range
 let allowableAuthor = /^(([A-Za-z]{1,}\s?[A-Za-z]{0,}){1,})$/; // Only letters ion the author
 let allowableTitle = /^((\w+\s?\w{0,}){1,})$/i; // Only letters and numbers in the title
 
