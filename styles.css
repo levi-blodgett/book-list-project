@@ -37,7 +37,7 @@ span {
   -webkit-text-stroke: 1px rgb(255, 255, 255);
    text-shadow:
        1px 1px 0 rgb(255, 255, 255),
-     -1px -1px 0 rgb(255, 255, 255),  
+     -1px -1px 0 rgb(255, 255, 255),
       1px -1px 0 rgb(255, 255, 255),
       -1px 1px 0 rgb(255, 255, 255),
        1px 1px 0 rgb(255, 255, 255);
@@ -69,7 +69,7 @@ span {
 img, .favoriteButton {
   height: 20px;
   width: 20px;
-  display: inline-block; 
+  display: inline-block;
   border-radius: 50%;
 }
 
@@ -83,4 +83,14 @@ img, .favoriteButton {
 
 .favorited {
   background: forestgreen;
+}
+
+/* FOOTER */
+
+footer {
+  text-align: center;
+  margin-bottom: 10px;
+}
+#copyright {
+  margin-bottom: 10px;
 }
